@@ -1,0 +1,392 @@
+{% extends 'index.html' %}
+{% block title %}{{ quiz.title }} | {{ course.name }}{% endblock %}
+{% block content %}
+<div class="quiz-container container py-4">
+  <!-- Quiz Header -->
+  <div class="quiz-header text-center mb-4">
+    <h2 class="quiz-title fw-bold">{{ quiz.title }}</h2>
+    <p class="text-muted">{{ quiz.description }}</p>
+    <div class="progress mb-3" style="height: 8px;">
+      <div class="progress-bar bg-primary" role="progressbar" style="width: 0%;" id="quiz-progress"></div>
+    </div>
+    <div class="d-flex justify-content-between mb-3">
+      <span class="badge bg-primary" id="answered-count">0/{{ questions|length }} Answered</span>
+      <span class="badge bg-success" id="correct-count">0 Correct</span>
+      <span class="badge bg-danger" id="incorrect-count">0 Incorrect</span>
+    </div>
+  </div>
+
+  <!-- Questions -->
+  <div class="questions-container">
+    {% for question in questions %}
+      <div class="question-card mb-4 rounded shadow bg-white"
+           id="question-{{ forloop.counter }}"
+           data-correct="{{ question.answer }}"
+           data-explanation="{{ question.explanation|escapejs }}"
+           data-number="{{ forloop.counter }}">
+        
+        <!-- Question Header -->
+        <div class="question-header p-3 border-bottom d-flex justify-content-between align-items-center">
+          <h5 class="mb-0">Question {{ forloop.counter }}</h5>
+          <div class="question-actions">
+            <button class="btn btn-sm btn-outline-primary toggle-workspace" 
+                    data-question="{{ forloop.counter }}">Workspace</button>
+            <button class="btn btn-sm btn-outline-info toggle-discussion" 
+                    data-question="{{ forloop.counter }}">Discussion</button>
+            <span class="question-status ms-2">
+              <i class="bi bi-circle text-muted"></i>
+            </span>
+          </div>
+        </div>
+        
+        <!-- Question Content -->
+        <div class="question-content p-3">
+          <div class="question-text mb-3">{{ question.question }}</div>
+          
+          <!-- Options -->
+          <div class="options-container">
+            <div class="option p-2 my-2 rounded border" data-value="A">
+              <span class="option-marker">A</span> {{ question.option1 }}
+            </div>
+            <div class="option p-2 my-2 rounded border" data-value="B">
+              <span class="option-marker">B</span> {{ question.option2 }}
+            </div>
+            <div class="option p-2 my-2 rounded border" data-value="C">
+              <span class="option-marker">C</span> {{ question.option3 }}
+            </div>
+            <div class="option p-2 my-2 rounded border" data-value="D">
+              <span class="option-marker">D</span> {{ question.option4 }}
+            </div>
+          </div>
+          
+          <!-- Explanation (initially hidden) -->
+          <div class="explanation mt-3 p-3 rounded border border-info bg-light d-none">
+            <h6 class="text-primary"><i class="bi bi-info-circle-fill me-2"></i>Explanation</h6>
+            <div class="explanation-content"></div>
+          </div>
+        </div>
+        
+        <!-- Workspace (initially hidden) -->
+        <div class="workspace p-3 border-top d-none">
+          <h6 class="workspace-header mb-2">
+            <i class="bi bi-pencil-square me-2"></i>Your Workspace
+            <button class="btn btn-sm btn-outline-danger float-end clear-workspace">Clear</button>
+          </h6>
+          <textarea class="form-control workspace-notes" placeholder="Use this space for your calculations or notes..."></textarea>
+        </div>
+        
+        <!-- Discussion (initially hidden) -->
+        <div class="discussion-section border-top p-3 d-none">
+          <h6 class="mb-3"><i class="bi bi-chat-dots me-2"></i>Discussion</h6>
+          <div class="discussion-posts mb-3">
+            <!-- Example discussions -->
+            <div class="discussion-post p-2 border-bottom">
+              <div class="d-flex justify-content-between">
+                <span class="fw-bold">StudentA</span>
+                <small class="text-muted">2 days ago</small>
+              </div>
+              <p class="mb-1">This question tests your understanding of {{ question.topic }}.</p>
+              <div class="d-flex">
+                <button class="btn btn-sm btn-link"><i class="bi bi-hand-thumbs-up"></i> 5</button>
+                <button class="btn btn-sm btn-link">Reply</button>
+              </div>
+            </div>
+          </div>
+          <div class="add-comment">
+            <textarea class="form-control mb-2" placeholder="Add your comment or question..."></textarea>
+            <button class="btn btn-sm btn-primary">Post Comment</button>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+  
+  <!-- Quiz Summary (appears after completion) -->
+  <div class="quiz-summary p-4 rounded shadow bg-white text-center d-none">
+    <h3>Quiz Summary</h3>
+    <div class="summary-stats my-4">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="stat-box p-3 border rounded">
+            <h4 id="final-score">0%</h4>
+            <p>Score</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="stat-box p-3 border rounded">
+            <h4 id="final-correct">0</h4>
+            <p>Correct</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="stat-box p-3 border rounded">
+            <h4 id="final-time">00:00</h4>
+            <p>Time Taken</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="btn btn-primary" id="review-answers">Review Answers</button>
+    <button class="btn btn-outline-primary ms-2" id="retry-quiz">Try Again</button>
+  </div>
+</div>
+
+<!-- Bootstrap Icons CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+
+<style>
+  .quiz-container {
+    max-width: 800px;
+  }
+  
+  .question-card {
+    border-left: 4px solid #6c757d;
+    transition: all 0.3s ease;
+  }
+  
+  .question-card.active {
+    border-left-color: #007bff;
+  }
+  
+  .question-card.answered-correct {
+    border-left-color: #28a745;
+  }
+  
+  .question-card.answered-incorrect {
+    border-left-color: #dc3545;
+  }
+  
+  .option {
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+  }
+  
+  .option:hover {
+    background-color: #f8f9fa;
+  }
+  
+  .option-marker {
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    line-height: 25px;
+    text-align: center;
+    border-radius: 50%;
+    background-color: #e9ecef;
+    margin-right: 10px;
+    font-weight: bold;
+  }
+  
+  .option.correct {
+    background-color: #d4edda !important;
+    border-color: #28a745 !important;
+    color: #155724 !important;
+  }
+  
+  .option.incorrect {
+    background-color: #f8d7da !important;
+    border-color: #dc3545 !important;
+    color: #721c24 !important;
+  }
+  
+  .option.correct .option-marker {
+    background-color: #28a745;
+    color: white;
+  }
+  
+  .option.incorrect .option-marker {
+    background-color: #dc3545;
+    color: white;
+  }
+  
+  .workspace-notes {
+    min-height: 100px;
+    font-family: monospace;
+  }
+  
+  .discussion-post {
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    margin-bottom: 10px;
+  }
+  
+  .explanation {
+    border-left: 4px solid #17a2b8;
+  }
+  
+  /* Question navigation */
+  .question-nav {
+    position: sticky;
+    top: 20px;
+  }
+  
+  .question-nav-item {
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 5px;
+    cursor: pointer;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+  }
+  
+  .question-nav-item.answered-correct {
+    background-color: #d4edda;
+    border-color: #28a745;
+  }
+  
+  .question-nav-item.answered-incorrect {
+    background-color: #f8d7da;
+    border-color: #dc3545;
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const questionCards = document.querySelectorAll('.question-card');
+    const totalQuestions = questionCards.length;
+    let answeredCount = 0;
+    let correctCount = 0;
+    let incorrectCount = 0;
+    let startTime = new Date();
+    
+    // Initialize the first question as active
+    if (questionCards.length > 0) {
+      questionCards[0].classList.add('active');
+    }
+    
+    // Handle option selection
+    document.querySelectorAll('.option').forEach(option => {
+      const questionCard = option.closest('.question-card');
+      const correct = questionCard.dataset.correct;
+      const explanation = questionCard.dataset.explanation;
+      const options = questionCard.querySelectorAll('.option');
+      const expContainer = questionCard.querySelector('.explanation');
+      const expContent = questionCard.querySelector('.explanation-content');
+      const questionStatus = questionCard.querySelector('.question-status i');
+      
+      option.addEventListener('click', () => {
+        // Skip if already answered
+        if (questionCard.classList.contains('answered-correct') || 
+            questionCard.classList.contains('answered-incorrect')) {
+          return;
+        }
+        
+        // Disable further selection
+        options.forEach(opt => opt.style.pointerEvents = 'none');
+        
+        // Check selected value
+        const selected = option.dataset.value;
+        let isCorrect = false;
+        
+        if (selected === correct) {
+          option.classList.add('correct');
+          questionCard.classList.add('answered-correct');
+          questionStatus.className = 'bi bi-check-circle-fill text-success';
+          correctCount++;
+          isCorrect = true;
+        } else {
+          option.classList.add('incorrect');
+          questionCard.classList.add('answered-incorrect');
+          questionStatus.className = 'bi bi-x-circle-fill text-danger';
+          incorrectCount++;
+          
+          // Highlight correct answer
+          questionCard.querySelector(`.option[data-value="${correct}"]`).classList.add('correct');
+        }
+        
+        // Update counts
+        answeredCount++;
+        document.getElementById('answered-count').textContent = `${answeredCount}/${totalQuestions} Answered`;
+        document.getElementById('correct-count').textContent = `${correctCount} Correct`;
+        document.getElementById('incorrect-count').textContent = `${incorrectCount} Incorrect`;
+        
+        // Update progress bar
+        const progressPercentage = (answeredCount / totalQuestions) * 100;
+        document.getElementById('quiz-progress').style.width = `${progressPercentage}%`;
+        
+        // Show explanation
+        expContent.innerHTML = explanation;
+        expContainer.classList.remove('d-none');
+        
+        // Show discussion section after answering
+        const discussionSection = questionCard.querySelector('.discussion-section');
+        discussionSection.classList.remove('d-none');
+        
+        // Check if quiz is complete
+        if (answeredCount === totalQuestions) {
+          const endTime = new Date();
+          const timeTaken = Math.floor((endTime - startTime) / 1000); // in seconds
+          const minutes = Math.floor(timeTaken / 60);
+          const seconds = timeTaken % 60;
+          const scorePercentage = Math.round((correctCount / totalQuestions) * 100);
+          
+          // Update summary
+          document.getElementById('final-score').textContent = `${scorePercentage}%`;
+          document.getElementById('final-correct').textContent = correctCount;
+          document.getElementById('final-time').textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+          
+          // Show summary section
+          document.querySelector('.quiz-summary').classList.remove('d-none');
+        }
+      });
+    });
+    
+    // Toggle workspace
+    document.querySelectorAll('.toggle-workspace').forEach(button => {
+      button.addEventListener('click', function() {
+        const questionId = this.dataset.question;
+        const workspaceDiv = document.getElementById(`question-${questionId}`).querySelector('.workspace');
+        
+        if (workspaceDiv.classList.contains('d-none')) {
+          workspaceDiv.classList.remove('d-none');
+          this.classList.add('active');
+        } else {
+          workspaceDiv.classList.add('d-none');
+          this.classList.remove('active');
+        }
+      });
+    });
+    
+    // Toggle discussion
+    document.querySelectorAll('.toggle-discussion').forEach(button => {
+      button.addEventListener('click', function() {
+        const questionId = this.dataset.question;
+        const discussionDiv = document.getElementById(`question-${questionId}`).querySelector('.discussion-section');
+        
+        if (discussionDiv.classList.contains('d-none')) {
+          discussionDiv.classList.remove('d-none');
+          this.classList.add('active');
+        } else {
+          discussionDiv.classList.add('d-none');
+          this.classList.remove('active');
+        }
+      });
+    });
+    
+    // Clear workspace
+    document.querySelectorAll('.clear-workspace').forEach(button => {
+      button.addEventListener('click', function() {
+        const textarea = this.closest('.workspace').querySelector('.workspace-notes');
+        textarea.value = '';
+      });
+    });
+    
+    // Review answers button
+    document.getElementById('review-answers').addEventListener('click', function() {
+      document.querySelector('.quiz-summary').classList.add('d-none');
+      window.scrollTo(0, 0);
+    });
+    
+    // Retry quiz button
+    document.getElementById('retry-quiz').addEventListener('click', function() {
+      location.reload();
+    });
+  });
+</script>
+{% endblock %}

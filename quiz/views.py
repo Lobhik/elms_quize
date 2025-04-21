@@ -322,6 +322,8 @@ def guest_startQuiz(request, code, quiz_id):
             marks += question.marks
         quiz.total_marks = marks
 
-        return render(request, 'quiz/portalStdNew.html', {'course': course, 'quiz': quiz, 'questions': questions, 'total_questions': total_questions, 'student': Student.objects.get(student_id=2)})
+        #return render(request, 'quiz/portalStdNew.html', {'course': course, 'quiz': quiz, 'questions': questions, 'total_questions': total_questions, 'student': Student.objects.get(student_id=2)})
+        return render(request, 'quiz/guest_quize.html', {'course': course, 'quiz': quiz, 'questions': questions, 'total_questions': total_questions, 'student': Student.objects.get(student_id=2)})
+
     else:
         return redirect('std_login')
