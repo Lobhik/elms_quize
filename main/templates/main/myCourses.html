@@ -19,7 +19,7 @@
       <div class="container shadow-sm">
          <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
             <ol class="breadcrumb p-3">
-               <li class="breadcrumb-item active" aria-current="page">My courses</li>
+               <li class="breadcrumb-item active" aria-current="page">My Courses</li>
             </ol>
          </nav>
       </div>
@@ -34,15 +34,15 @@
             </div>
             <div class="card-body">
                <h5 class="card-title fw-bold"> {{courses.department}}-{{courses.code}} : {{courses.name}}</h5>
-               <a href="{% url 'guest_course' courses.code %}" class="btn btn-outline-dark px-5">Enter</a>
+               <a href="{% url 'guest_myQuizzes' courses.code %}" class="btn btn-outline-dark px-5">Enter</a>
             </div>
-            <div class="card-footer text-light fw-bold">
+            {% comment %} <div class="card-footer text-light fw-bold">
                {% if courses.faculty %}
                Course Teacher : {{ courses.faculty.name}}
                {% else %}
                Teacher not assigned yet
                {% endif %}
-            </div>
+            </div> {% endcomment %}
          </div>
          <!-- individual course ends -->
          {% endfor %}
