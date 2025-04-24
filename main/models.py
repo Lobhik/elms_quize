@@ -57,6 +57,8 @@ class Department(models.Model):
     department_id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=100, null=False)
     description = models.TextField(null=True, blank=True)
+    slug = models.SlugField(null=True, blank=True)
+    icon = models.CharField(max_length=50, null=True, blank=True)
 
     class Meta:
         verbose_name_plural = 'Departments'
