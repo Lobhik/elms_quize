@@ -13,58 +13,118 @@
 {% url 'myCourses' %}
 {% endblock %}
 {% block content %}
-<div>
-   
-   <!--navigation links-->
-   <div class="container">
-      <div class="container shadow-sm">
-         <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
-            <ol class="breadcrumb p-3">
-               <li class="breadcrumb-item active" aria-current="page">My Courses</li>
-            </ol>
-         </nav>
-      </div>
-      {% if departments %}
-      <!-- Course container -->
-      <div class="card_primary d-flex justify-content-center flex-wrap">
-         {% for dept in departments %}
-         <!-- individual course starts -->
-         <div class="cd card text-center my-4 mx-4" style="width: 30rem !important;">
-            <div class="card-header text-light fw-bold">
-               <i data-lucide={{dept.icon}}></i>
-                 Dept. of {{dept.name}}
-            </div>
-
-            <div class="card-body">
-                {% comment %} <h5 class="card-title fw-bold">{{ dept.name }} - {{ dept.department_id }}</h5> {% endcomment %}
-
-                    <!-- List courses -->
-                <ul class="list-group list-group-flush my-2">
-                   {% for course_sub in dept.courses.all %}
-                      <li class="list-group-item">
-                        {% comment %} <h5>lobhik {{ course_sub.name }} - {{ course_sub.code }}</h5> {% endcomment %}
-                         <a href="{% url 'guest_myQuizzes' course_sub.code %}">
-                            <h5 class="card-title fw-bold">
-                            {{ course_sub.name }}
-                            </h5>
-                        </a>
-                      </li>
-                   {% empty %}
-                      <li class="list-group-item text-muted">No courses available</li>
-                   {% endfor %}
-                </ul>
-             </div> 
-            
-         </div>
-         <!-- individual course ends -->
-         {% endfor %}
-         <!-- Course container ends -->
-      </div>
-      {% else %}
-      <div class="text-center fs-5 text-secondary">
-         <p>You are not enrolled in any courses</p>
-      </div>
-      {% endif %}
+<div class="container py-4">
+   <!-- Page Header -->
+   <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="mb-0 fw-bold text-primary">My Courses</h2>
+      <nav aria-label="breadcrumb">
+         <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="/" class="text-decoration-none">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">My Courses</li>
+         </ol>
+      </nav>
    </div>
+   
+   {% if departments %}
+   <!-- Department Cards -->
+   <div class="row g-4">
+      {% for dept in departments %}
+      <div class="col-md-6 col-lg-4">
+         <div class="card h-100 shadow-sm border-0 hover-shadow transition">
+            <!-- Department Header -->
+            <div class="card-header bg-gradient d-flex align-items-center p-3" 
+                 style="background-color: #4361ee; border-bottom: none; border-radius: 0.5rem 0.5rem 0 0;">
+               <div class="icon-circle bg-white p-2 me-3 rounded-circle">
+                  <i data-lucide="{{dept.icon}}" class="text-primary" style="width: 24px; height: 24px;"></i>
+               </div>
+               <h5 class="card-title mb-0 text-white fw-bold">{{dept.name}}</h5>
+            </div>
+            
+            <!-- Course List -->
+            <div class="card-body p-0">
+               {% if dept.courses.all %}
+               <ul class="list-group list-group-flush">
+                  {% for course_sub in dept.courses.all %}
+                  <li class="list-group-item p-0">
+                     <a href="{% url 'guest_myQuizzes' course_sub.code %}" class="d-flex align-items-center p-3 text-decoration-none hover-bg-light">
+                        <div class="course-icon me-3 bg-light p-2 rounded-circle">
+                           <i data-lucide="book-open" style="width: 20px; height: 20px;" class="text-primary"></i>
+                        </div>
+                        <div>
+                           <h6 class="mb-0 fw-bold text-dark">{{ course_sub.name }}</h6>
+                           <small class="text-muted">{{ course_sub.code }}</small>
+                        </div>
+                        <i data-lucide="chevron-right" class="ms-auto text-muted" style="width: 16px; height: 16px;"></i>
+                     </a>
+                  </li>
+                  {% endfor %}
+               </ul>
+               {% else %}
+               <div class="p-4 text-center">
+                  <div class="empty-icon mb-3">
+                     <i data-lucide="info" style="width: 32px; height: 32px;" class="text-muted"></i>
+                  </div>
+                  <p class="text-muted mb-0">No courses available in this department</p>
+               </div>
+               {% endif %}
+            </div>
+            
+            <!-- Department Footer -->
+            <div class="card-footer bg-transparent border-0 text-end p-3">
+               <span class="badge bg-light text-dark">{{ dept.courses.all|length }} courses</span>
+            </div>
+         </div>
+      </div>
+      {% endfor %}
+   </div>
+   {% else %}
+   <!-- Empty State -->
+   <div class="empty-state text-center p-5 bg-light rounded-3 mt-4">
+      <div class="empty-icon mb-4">
+         <i data-lucide="book-x" style="width: 64px; height: 64px;" class="text-secondary"></i>
+      </div>
+      <h4 class="text-secondary">You're not enrolled in any courses yet</h4>
+      <p class="text-muted">Browse available courses and enroll to get started</p>
+      <a href="{% url 'courses' %}" class="btn btn-primary mt-3">
+         <i data-lucide="search" style="width: 16px; height: 16px;" class="me-2"></i>
+         Browse Courses
+      </a>
+   </div>
+   {% endif %}
 </div>
+
+<style>
+   .hover-shadow:hover {
+      box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+   }
+   
+   .hover-bg-light:hover {
+      background-color: rgba(0, 0, 0, 0.03);
+   }
+   
+   .transition {
+      transition: all 0.3s ease;
+   }
+   
+   .icon-circle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+   }
+   
+   .empty-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+   }
+</style>
+
+<script>
+   document.addEventListener('DOMContentLoaded', function() {
+      // Initialize Lucide icons
+      if (typeof lucide !== 'undefined') {
+         lucide.createIcons();
+      }
+   });
+</script>
 {% endblock %}

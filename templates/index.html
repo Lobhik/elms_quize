@@ -1,73 +1,299 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-   <head>
-      <meta charset="UTF-8">
-      <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>{% block title %}{% endblock title %}</title>
-      <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/icon/apple-touch-icon.png' %}">
-      <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/icon/favicon-32x32.png' %}">
-      <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/icon/favicon-16x16.png' %}">
-      <link rel="manifest" href="{% static 'images/icon/site.webmanifest' %}">
-      <link rel="stylesheet" href="{% static 'styles/bootstrap.min.css' %}">
-      <link rel="stylesheet" href="{% static 'styles/style.css' %}">
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha512-z4OUqw38qNLpn1libAN9BsoDx6nbNFio5lA6CuTp9NlK83b89hgyCVq+N5FdBJptINztxn1Z3SaKSKUS5UP60Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-      <script src="https://unpkg.com/lucide@latest"></script>
-
-      {{ form.media }}
-   </head>
-   <body>
-      <!-- Navbar Starts -->
-      <nav class="navbar sticky-top navbar-expand-lg navbar-dark navbar-mod">
-         <div class="container-fluid">
-            <a class="navbar-brand fw-bold fs-5 px-2 py-1" href="/admin" target="_blank" data-bs-toggle="tooltip"
-               data-bs-placement="bottom" title="Access admin panel">elms</a>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock title %}</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/icon/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/icon/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/icon/favicon-16x16.png' %}">
+    <link rel="manifest" href="{% static 'images/icon/site.webmanifest' %}">
+    <link rel="stylesheet" href="{% static 'styles/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'styles/style.css' %}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha512-z4OUqw38qNLpn1libAN9BsoDx6nbNFio5lA6CuTp9NlK83b89hgyCVq+N5FdBJptINztxn1Z3SaKSKUS5UP60Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    {{ form.media }}
+    
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --accent-color: #4cc9f0;
+            --success-color: #4ade80;
+            --warning-color: #fbbf24;
+            --danger-color: #ef4444;
+            --light-color: #f8fafc;
+            --dark-color: #1e293b;
+            --gray-color: #64748b;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f9fafb;
+            color: #334155;
+        }
+        
+        .navbar-mod {
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 0.75rem 1rem;
+        }
+        
+        .navbar-brand {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 0.5rem 1rem !important;
+            margin-right: 1.5rem;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+        }
+        
+        .navbar-brand:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .nav-link {
+            padding: 0.5rem 1rem !important;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            margin-right: 0.25rem;
+        }
+        
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .nav-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .profile-avatar {
+            background-color: rgba(255, 255, 255, 0.2);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .searchbar {
+            border-radius: 20px;
+            padding-left: 1rem;
+            border: none;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .searchbar::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .searchbar:focus {
+            background-color: rgba(255, 255, 255, 0.3);
+            box-shadow: none;
+        }
+        
+        .search-btn {
+            border-radius: 20px;
+            font-weight: 500;
+            padding: 0.375rem 1rem;
+            transition: all 0.3s ease;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .search-btn:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .card {
+            border-radius: 10px;
+            border: none;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .card-header {
+            background-color: #fff;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .badge {
+            font-weight: 500;
+            padding: 0.5em 0.75em;
+            border-radius: 6px;
+        }
+        
+        /* Table styling */
+        .table thead th {
+            background-color: #f8fafc;
+            border-bottom-width: 1px;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .table td, .table th {
+            padding: 1rem;
+            vertical-align: middle;
+        }
+        
+        /* Button styling */
+        .btn {
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        /* Empty state styling */
+        .empty-state {
+            padding: 3rem;
+            text-align: center;
+            color: var(--gray-color);
+            background-color: #f8fafc;
+            border-radius: 0.5rem;
+        }
+        
+        /* Add some additional space to main content */
+        main {
+            padding: 2rem 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar Starts -->
+    <nav class="navbar sticky-top navbar-expand-lg navbar-dark navbar-mod">
+        <div class="container">
+            <a class="navbar-brand fw-bold fs-5" href="/admin" target="_blank" data-bs-toggle="tooltip"
+               data-bs-placement="bottom" title="Access admin panel">
+               <i data-lucide="graduation-cap" class="me-2" style="width: 20px; height: 20px;"></i>
+               eLMS
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01"
-               aria-controls="navbarColor01" aria-expanded="true" aria-label="Toggle navigation">
-            <span class=" navbar-toggler-icon"></span>
+               aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarColor01">
-               <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                  <li class="nav-item">
-                     <a class="nav-link active fw-bold" aria-current="page" href="{% block courses %}{% endblock courses %}"
-                        data-bs-toggle="tooltip" data-bs-placement="bottom" title="Course home page">Dashboard</a>
-                  </li>
-                  <li class="nav-item">
-                     <a class="nav-link active fw-bold" aria-current="page" href="/departments"
-                        data-bs-toggle="tooltip" data-bs-placement="bottom" title="Course home page">Departments</a>
-                  </li>
-                  <li class="nav-item">
-                     <a class="nav-link active fw-bold" href="{% block allCourses %}{% endblock %}" data-bs-toggle="tooltip"
-                        data-bs-placement="bottom" title="Show all courses">Courses</a>
-                  </li>
-                  <li class="nav-item">
-                     <a class="nav-link active fw-bold" href="{% url 'std_logout' %}" data-bs-toggle="tooltip"
-                        data-bs-placement="bottom" title="Log out">Log out</a>
-                  </li>
-                  <li class="nav-item">
-                     <a class="nav-link active fw-bold" href="{% block profile %}{% endblock profile %}"
-                        data-bs-toggle="tooltip" data-bs-placement="bottom"
-                        title="Check your profile">{% block user %}{% endblock  %}</a>
-                  </li>
-               </ul>
-               <form class="d-flex" action=" {% url 'search' %}" method="GET">
-                  <input id="searchIn" class="form-control me-2 searchbar" type="search" placeholder="Search courses" aria-label="Search"
-                     name="q">
-                  <button id="searchBtn" class="btn btn-outline-light" type="submit">Search</button>
-               </form>
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active fw-semibold" aria-current="page" href="{% block courses %}{% endblock courses %}">
+                            <i data-lucide="layout-dashboard" class="me-1" style="width: 18px; height: 18px;"></i>
+                            Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active fw-semibold" aria-current="page" href="/departments">
+                            <i data-lucide="building" class="me-1" style="width: 18px; height: 18px;"></i>
+                            Departments
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active fw-semibold" href="{% block allCourses %}{% endblock %}">
+                            <i data-lucide="book-open" class="me-1" style="width: 18px; height: 18px;"></i>
+                            Courses
+                        </a>
+                    </li>
+                </ul>
+                
+                <div class="d-flex align-items-center">
+                    {% comment %} <form class="d-flex me-3" action="{% url 'search' %}" method="GET">
+                        <div class="position-relative">
+                            <input id="searchIn" class="form-control searchbar" type="search" placeholder="Search courses" 
+                                   aria-label="Search" name="q">
+                            <button id="searchBtn" class="btn search-btn text-white" type="submit">
+                                <i data-lucide="search" style="width: 18px; height: 18px;"></i>
+                                Search
+                            </button>
+                        </div>
+                    </form> {% endcomment %}
+                    
+                    <div class="dropdown">
+                        <a class="nav-link active fw-semibold nav-profile" href="{% block profile %}{% endblock profile %}" 
+                           id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <div class="profile-avatar">
+                                <i data-lucide="user" style="width: 16px; height: 16px;"></i>
+                            </div>
+                            <span>{% block user %}{% endblock %}</span>
+                            <i data-lucide="chevron-down" style="width: 16px; height: 16px;"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                            <li>
+                                <a class="dropdown-item" href="{% block profile_link %}{% endblock profile_link %}">
+                                    <i data-lucide="user" class="me-2" style="width: 16px; height: 16px;"></i>
+                                    Profile
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{% url 'std_logout' %}">
+                                    <i data-lucide="log-out" class="me-2" style="width: 16px; height: 16px;"></i>
+                                    Log out
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-         </div>
-      </nav>
-      <!-- Navbar Ends -->
-      {% block  content %}
-      {% endblock  %}
-      <script src=" {% static 'js/bootstrap.bundle.min.js' %} "></script>
-      <script>
-         lucide.createIcons();
-       </script>
-   </body>
+        </div>
+    </nav>
+    <!-- Navbar Ends -->
+    
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+    
+    <!-- Footer -->
+    <footer class="bg-white py-4 mt-5 border-top">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="mb-0 text-muted">&copy; {% now "Y" %} eLMS - Education Learning Management System</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="mb-0 text-muted">Version 2.0</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize tooltips
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl)
+            });
+            
+            // Initialize Lucide icons
+            lucide.createIcons();
+        });
+    </script>
+</body>
 </html>
