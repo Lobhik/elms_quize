@@ -1,6 +1,8 @@
 {% extends 'index.html' %}
 {% block title %}{{ quiz.title }} | {{ course.name }}{% endblock %}
 {% block content %}
+{% load text_filters %}
+
 <div class="quiz-container container py-4">
     <!-- navigation links -->
     <div class="container shadow-sm">
@@ -41,7 +43,7 @@
       <div class="question-card mb-4 rounded shadow bg-white"
            id="question-{{ forloop.counter }}"
            data-correct="{{ question.answer }}"
-           data-explanation="{{ question.explanation|escapejs }}"
+           data-explanation="{{ question.explanation|linebreaksbr }}"
            data-number="{{ forloop.counter }}">
         
         <!-- Question Header -->

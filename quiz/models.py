@@ -60,6 +60,8 @@ class Question(models.Model):
     answer = models.CharField(max_length=1, choices=(
         ('A', 'A'), ('B', 'B'), ('C', 'C'), ('D', 'D')), default='A')
     explanation = models.TextField(null=True, blank=True)
+    difficulty = models.CharField(max_length=20, choices=[('easy', 'Easy'), ('moderate', 'Moderate'), ('hard','Hard')], default='hard')
+
 
     def __str__(self):
         return self.question

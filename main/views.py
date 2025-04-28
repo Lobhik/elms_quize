@@ -741,27 +741,50 @@ def guestFaculty(request):
 
 
 
-# Display all courses (guest student view)
+# # Display all courses (guest student view)
+# def guest_myCourses(request):
+#     try:
+#         if request:
+#             student = Student.objects.get(
+#                 student_id=2)
+#             courses = student.course.all()
+#             faculty = student.course.all().values_list('faculty_id', flat=True)
+
+#             # Get the student's department information
+#             department = student.department  # This gives you the department object
+
+#             context = {
+#                 'courses': courses,
+#                 'student': student,
+#                 'faculty': faculty,
+#                 'department_obj':department,
+#             }
+
+#             return render(request, 'main/myCourses.html', context)
+#         else:
+#             return redirect('std_login')
+#     except:
+#         return render(request, 'error.html')
+    
+
+
+
+
+
+
 def guest_myCourses(request):
     try:
-        if request:
-            student = Student.objects.get(
-                student_id=2)
-            courses = student.course.all()
-            faculty = student.course.all().values_list('faculty_id', flat=True)
+        departments = Department.objects.prefetch_related('courses').all()
+        
+        context = {
+                'departments': departments,
+                'student': {'student_id':2, 'name':'guest'}
+                }
 
-            context = {
-                'courses': courses,
-                'student': student,
-                'faculty': faculty
-            }
-
-            return render(request, 'main/myCourses.html', context)
-        else:
-            return redirect('std_login')
-    except:
+        return render(request, 'main/c_my_courses.html', context)
+    
+    except Exception as e:
         return render(request, 'error.html')
-
 
 
 # Particular course page (student view)

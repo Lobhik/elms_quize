@@ -1,4 +1,6 @@
 from django.urls import path
+
+from quiz.save_load_quize import bulk_create_questions
 from . import views
 
 urlpatterns = [
@@ -12,6 +14,7 @@ urlpatterns = [
     path('quizResult/<int:code>/<int:quiz_id>', views.quizResult, name='quizResult'),
     path('guest_myQuizzes/<int:code>', views.guest_myQuizzes, name='guest_myQuizzes'),
     path('guest_startQuiz/<int:code>/<int:quiz_id>', views.guest_startQuiz, name='guest_startQuiz'),
+    path('questions/bulk-create', bulk_create_questions, name='bulk_create_questions'),
 
 
   
