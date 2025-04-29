@@ -20,10 +20,10 @@
       <nav aria-label="breadcrumb">
          <ol class="breadcrumb mb-0">
             <li class="breadcrumb-item">
-               <a href="{% url 'facultyCourses' %}" class="text-decoration-none">My Courses</a>
+               <a href="/" class="text-decoration-none">My Courses</a>  <!-- href="{% url 'facultyCourses' %}" -->
             </li>
             <li class="breadcrumb-item">
-               <a href="{% url 'course' course.code %}" class="text-decoration-none">{{ course.name }}</a>
+               <a href="/" class="text-decoration-none">{{ course.name }}</a> <!-- {% url 'course' course.code %} -->
             </li>
             <li class="breadcrumb-item active" aria-current="page">Quizzes</li>
          </ol>
