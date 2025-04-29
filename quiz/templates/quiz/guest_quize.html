@@ -11,9 +11,9 @@
           <li class="breadcrumb-item fw-bold"><a style="color: rgb(10, 10, 48)" href = "/"> <!-- href="{% url 'facultyCourses' %}"> -->
             My Courses</a>
           </li>
-          <li class="breadcrumb-item fw-bold"><a style="color: rgb(10, 10, 48)" href="{% url 'course' course.code %}">{{ course.name }}</a>
+          <li class="breadcrumb-item fw-bold"><a style="color: rgb(10, 10, 48)" href="/">{{ course.name }}</a>  <!-- href="{% url 'course' course.code %} -->
           </li>
-          <li class="breadcrumb-item fw-bold"><a style="color: rgb(10, 10, 48)" href="{% url 'course' course.code %}">{{ quiz.title }}</a>
+          <li class="breadcrumb-item fw-bold"><a style="color: rgb(10, 10, 48)" href="/">{{ quiz.title }}</a>  <!-- href="{% url 'course' course.code %} -->  
           </li>
           <li class="breadcrumb-item active animate__animated animate__backInRight" aria-current="page">Quizzes</li>
           
