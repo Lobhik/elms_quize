@@ -61,7 +61,16 @@ class Question(models.Model):
         ('A', 'A'), ('B', 'B'), ('C', 'C'), ('D', 'D')), default='A')
     explanation = models.TextField(null=True, blank=True)
     difficulty = models.CharField(max_length=20, choices=[('easy', 'Easy'), ('moderate', 'Moderate'), ('hard','Hard')], default='hard')
-
+    #for storing html content
+    html_option1 = models.TextField(null=True, blank=True)
+    html_option2 = models.TextField(null=True, blank=True)
+    html_option3 = models.TextField(null=True, blank=True)
+    html_option4 = models.TextField(null=True, blank=True)
+    html_explanation = models.TextField(null=True, blank=True)
+    status = models.IntegerField(choices=[
+        (1, 'Active'),(2, 'Inactive'),(3, 'Deleted')], default=1)
+    created_date = models.DateTimeField(auto_now_add=True)  # set once at creation
+    updated_date = models.DateTimeField(auto_now=True)      # updated every save
 
     def __str__(self):
         return self.question
