@@ -1,3 +1,4 @@
+import base64
 from venv import create
 from django.db import models
 from main.models import Student, Course
@@ -90,6 +91,15 @@ class Question(models.Model):
     def total_wrong_answers(self):
         return StudentAnswer.objects.filter(question=self).exclude(answer=self.answer).count()
 
+    def decode_html(self, html_value):
+        if html_value:
+            html_text = base64.b64decode(html_value).decode('utf-8')
+            return html_text.replace('src="/_files', 'src="https://www.indiabix.com/_files')
+        return ''
+
+    @property
+    def html_decoded(self):
+        return self.decode_html(self.html_explanation)
 
 class StudentAnswer(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
