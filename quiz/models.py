@@ -1,4 +1,5 @@
 import base64
+import re
 from venv import create
 from django.db import models
 from main.models import Student, Course
@@ -94,7 +95,9 @@ class Question(models.Model):
     def decode_html(self, html_value):
         if html_value:
             html_text = base64.b64decode(html_value).decode('utf-8')
-            return html_text.replace('src="/_files', 'src="https://www.indiabix.com/_files')
+            html_text=  html_text.replace('src="/_files', 'src="https://www.indiabix.com/_files')
+            html_text= re.sub(r'<p class="mx-bold mx-green">Video Explanation: <a href="https:\/\/youtu\.be\/[^"]+" target="_blank">[^<]+<\/a><\/p>', '', html_text)
+            return html_text
         return ''
 
     @property
