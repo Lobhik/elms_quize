@@ -10,6 +10,8 @@
         <ol class="breadcrumb p-3">
           <li class="breadcrumb-item fw-bold"><a style="color: rgb(10, 10, 48)" href = "/"> <!-- href="{% url 'facultyCourses' %}"> -->
             My Courses</a>
+            <img src="{{ MEDIA_URL }}symbol_first.gif.gif" alt="My Image">
+
           </li>
           <li class="breadcrumb-item fw-bold"><a style="color: rgb(10, 10, 48)" href="/">{{ course.name }}</a>  <!-- href="{% url 'course' course.code %} -->
           </li>
@@ -43,7 +45,7 @@
       <div class="question-card mb-4 rounded shadow bg-white"
            id="question-{{ forloop.counter }}"
            data-correct="{{ question.answer }}"
-           data-explanation="{{ question.explanation|linebreaksbr }}"
+           data-explanation="{{ question.html_decoded }}"
            data-number="{{ forloop.counter }}">
         
         <!-- Question Header -->
@@ -265,6 +267,11 @@
     background-color: #f8d7da;
     border-color: #dc3545;
   }
+  .ga-td-divident {
+    border-bottom: 1px solid rgba(0, 0, 0, .8);
+    vertical-align: bottom;
+    padding-bottom: 2px;
+}
 </style>
 
 <script>
